@@ -2,7 +2,7 @@ Species,GeneID,GeneName,Elements,Citation(s) - DOI only,Closest species ortholog
 A.thaliana,AT1G01580,FRO2,Fe,"doi,10.1038/17800",NA,Root,NA
 A.thaliana,AT1G18910,BTSL2,"Fe,Mn,Zn",10.1039/c7mt00152e,NA,Leaf,NA
 A.thaliana,AT1G20110,FYVE1,"Fe,Zn,Co,Mn",10.1073/pnas.1402262111,NA,Root,NA
-A.thaliana,AT1G56160,myb72,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
+A.thaliana,AT1G56160,myb10myb72,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
 A.thaliana,AT1G56430,NAS4,"Fe,Cd,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
 A.thaliana,AT1G74770,BTSL1,"Fe,Mn,Zn",10.1039/c7mt00152e,NA,Leaf,NA
 A.thaliana,AT1G80830,AtNRAMP1,Mn,10.1105/tpc.109.073023,NA,"Shoots,roots",NA
@@ -17,7 +17,7 @@ A.thaliana,AT2G46430,CNGC3,K,10.1093/jxb/erj064,NA,Leaf,NA
 A.thaliana,AT2G46800,AtMTP1,Zn,10.1016/j.febslet.2005.06.046,NA,Shoots,NA
 A.thaliana,AT3G06060,TSC10a,"Na,K,Rb,Mg,Ca,Fe,Mo",10.1105/tpc.110.079095,NA,Leaf,NA
 A.thaliana,AT3G06100,NIP7,As,10.1002/1873-3468.12103 10.1016/j.febslet.2008.04.022,NA,NA,NA
-A.thaliana,AT3G12820,myb10,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
+A.thaliana,AT3G12820,myb10myb72,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
 A.thaliana,AT3G18290,BTS,"Fe,Zn,Mn",10.1039/c7mt00152e,NA,Leaf,NA
 A.thaliana,AT3G43790,ZIFL2,Cs,10.1093/pcp/pcu157,NA,Leaf,NA
 A.thaliana,AT3G47640,PYE,"Fe,Zn,Mn,Co",10.1105/tpc.110.074096,NA,Root,NA
@@ -93,6 +93,9 @@ O.sativa,Os05g0551000,OsHRZ2,Fe,10.1038/ncomms3791,NA,"Shoots, seeds",
 O.sativa,Os01g0861700,OsHORZ1,Fe,10.1038/ncomms3792,NA,"Shoots, seeds","Gene ID from RAPDB, with no matching ID at MSU"
 O.sativa,LOC_Os08g04390,OsPRI1,Fe,10.1104/pp.17.00794,NA,"Shoots, roots",NA
 O.sativa,LOC_Os03g18550,OsMIT,Fe,10.1038/ncomms1326,NA,Shoots,NA
-wheat,NA,HKT2;1,Na,"10.1046/j.1365-313X.2002.01410.x,10.1046/j.1365-313X.2002.01410.x",NA,NA,NA
+wheat,NA,HKT2;1,Na,10.1046/j.1365-313X.2002.01410.x,NA,NA,NA
 Z.mays,GRMZM2G060952,YS1,Fe,10.1104/pp.106.1.71,"O.sativa, S.bicolor, T.aestivum",Root,ZEAMMB73_Zm00001d028360
-Z.mays,GRMZM2G063306,YS3,Fe,Rodriguez & Walker,NA,Leaf,
+Z.mays,GRMZM2G063306,YS3,Fe,(Chan-Rodriguez and Walker 2018),NA,Leaf,
+A.thaliana,AT1G12640,LPCAT1,P,doi: 10.7554/eLife.32077,,Leaf,
+T.aestivum,Traes_4BL_7091749BF,TaABCC13,Ca,https://doi.org/10.1093/jxb/erw224,,Seed,
+T.aestivum,2AL-TRIAE_CS42_ 2AL_TGACv1_095050_AA0306410,TaIPK1,"Fe, Zn",doi: [10.3389/fpls.2018.00259],,Seed,

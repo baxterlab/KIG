@@ -49,7 +49,7 @@ tagalongs<-ionomicsKnownGenes[grep("wheat",ionomicsKnownGenes$Species),]
 ionomicsKnownGenesbase$Elements<-gsub(" ","",ionomicsKnownGenesbase$Elements, fixed = TRUE)
 
 ##this order may be important, depending on how ionomicskonwngenes gets sorted
-possibleOrthologs<-c("A.thaliana","M.truncatula","O.sativa","Z.mays","G.max","S.bicolor","S.viridisearly-release","S.italica")
+possibleOrthologs<-c("A.thaliana","M.truncatula","O.sativa","T.aestivumearly-release","Z.mays","G.max","S.bicolor","S.viridisearly-release","S.italica")
 #sort(possibleOrthologs)
 ###finding orthologs for the primary genes
 OrthologLists<-foreach(i=unique(ionomicsKnownGenesbase$Species), .packages = c('plyr','dplyr','reader')) %do% {
