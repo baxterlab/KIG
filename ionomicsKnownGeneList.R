@@ -26,41 +26,63 @@ noDups<-function(AdataFrame){
 surprisinglySimple<-function(...){mapply(rbind, ..., SIMPLIFY = F)}
 geneFilePrep<-function(filePath){
   comparison<-fread(filePath, sep = ",", stringsAsFactors = FALSE)
-  setnames(comparison,c("Gene1id","Gene1org","Gene2id","Gene2org","Relationship","Gene2end","Gene2start","Gene1end","Gene1start","Gene1chr",
-                        "Gene2chr","Gene1Defline","Gene2Defline"))
-  comparison[,Gene1chr := gsub("Chr|Chr_","",Gene1chr),]
-  comparison[,Gene2chr := gsub("Chr|Chr_","",Gene2chr),]
-  comparison[,Gene1org := gsub(" ","",Gene1org),]
-  comparison[,Gene2org := gsub(" ","",Gene2org),]
-  ##make chromosome and base pair columns numeric (this will convert some non-numeric chromsome IDs to NA (with warnings), 
-  #they aren't the major chromosomes anyways)
-  for(col in c("Gene1chr","Gene2chr","Gene1start","Gene2start","Gene1end","Gene2end")) set(comparison, j=col, 
-                                                                                           value=as.numeric(comparison[[col]]))
+  if(!length(grep("Homolog",colnames(comparison)))==0){
+    setnames(comparison,old = c("Homolog > Gene . Primary Identifier","Homolog > Gene > Organism Name",
+                                "Homolog > Ortholog _ Gene . Primary Identifier","Homolog > Ortholog _ Gene > Organism Name"),
+             new = c("Gene1id","Gene1org","Gene2id","Gene2org"))
+    comparison[,Gene1org := gsub(" ","",Gene1org),]
+    comparison[,Gene2org := gsub(" ","",Gene2org),]
+  }else{
+    setnames(comparison, old = c("Gene name","Organism name","Ortholog gene name","Ortholog organism name"),
+             new = c("Gene1id","Gene1org","Gene2id","Gene2org"))
+    comparison[,Gene1org := gsub("^([A-Z])","\\1.",Gene1org),]
+    comparison[,Gene2org := gsub("^([A-Z])","\\1.",Gene2org),]
+  }
   return(comparison)
 }
 ############################
+####beginning of pipeline###
+
 dir.create("./knownIonomicsGenesWOrthologs")
-ionomicsKnownGenes <- read_csv("IonomicsKnownGenes/ionomics_known_genes_input.csv")
-ionomicsKnownGenes<-ionomicsKnownGenes[order(ionomicsKnownGenes$Species, ionomicsKnownGenes$GeneID),]
-ionomicsKnownGenesbase<-ionomicsKnownGenes[-grep("wheat",ionomicsKnownGenes$Species),]
-tagalongs<-ionomicsKnownGenes[grep("wheat",ionomicsKnownGenes$Species),]
+listBase <- read_csv("IonomicsKnownGenes/ionomics_known_genes_input.csv")
+listBase<-listBase[order(listBase$Species, listBase$GeneID),]
+###checking for duplicate entries
+listBase[which(duplicated(listBase$GeneID)),]
+
 
 ###removes whitespaces in lists so they collapse correctly
-ionomicsKnownGenesbase$Elements<-gsub(" ","",ionomicsKnownGenesbase$Elements, fixed = TRUE)
+listBase$Elements<-gsub(" ","",listBase$Elements, fixed = TRUE)
 
 ##this order may be important, depending on how ionomicskonwngenes gets sorted
-possibleOrthologs<-c("A.thaliana","M.truncatula","O.sativa","T.aestivumearly-release","Z.mays","G.max","S.bicolor","S.viridisearly-release","S.italica")
-#sort(possibleOrthologs)
+inferredSpecies<-sort(unique(c(gsub("^([^_]+)_.*","\\1",list.files("./data/phytozome/current/", pattern="^[^_]+_[^_]+.csv$", recursive = F)),
+                          gsub("^[^_]+_([^_]+).csv","\\1",list.files("./data/phytozome/current/", pattern="^[^_]+_[^_]+.csv$", recursive = F)))))
+possibleOrthologs<-c(as.character(unique(listBase$Species)),inferredSpecies[!inferredSpecies %in% unique(listBase$Species)])
+###with a short list of species, listing them is the best way to do this. But with a larger list you could search and grep the file names of your phytozome dir
+###my phytozome dir includes species not on the list so this way I can make sure it's just the species I want for KIG
+
 ###finding orthologs for the primary genes
-OrthologLists<-foreach(i=unique(ionomicsKnownGenesbase$Species), .packages = c('plyr','dplyr','reader')) %do% {
-  OrgSub<-ionomicsKnownGenesbase[ionomicsKnownGenesbase$Species==i,]
-  files<-list.files("./data/phytozome/current/", recursive = FALSE, full.names = TRUE, pattern = paste0(i,"_"))
-  List_Holder<-foreach(f=files, .packages = c('plyr','dplyr','reader'), .combine = surprisinglySimple) %do% {
-    geneFile<-geneFilePrep(f)
-    Frame_Maker<-foreach(iD=OrgSub$GeneID, .packages = c('plyr','dplyr','reader')) %do% {
-      base<-data.frame(OrthologSpecies=geneFile$Gene2org[geneFile$Gene1id==iD], GeneID=geneFile$Gene2id[geneFile$Gene1id==iD])
-      if(nrow(base)!=0){base$Inferred<-iD; base$Elements<-OrgSub$Elements[OrgSub$GeneID==iD]}
-      return(base)
+####don't worry about the warnings generated in this loop, it has to do w the removal of mitochondira or chloroplast genes in the phytozome lists, they will be removed
+OrthologLists<-foreach(i=unique(listBase$Species), .packages = c('plyr','dplyr','reader')) %do% {
+  OrgSub<-listBase[listBase$Species==i,]
+  List_Holder<-foreach(f=possibleOrthologs[!possibleOrthologs==i], .packages = c('plyr','dplyr','reader'), .combine = surprisinglySimple) %do% {
+    ###I name my files depending on wich species is the homolog species vs ortholog species: Soy_corn.csv vs corn_soy.csv
+    ###pattern string can be edited to search for your own naming convention
+    file<-list.files("./data/phytozome/current/", pattern = paste0(f,"_",i,"|",i,"_",f), full.names = T, recursive = F)[1]
+    if(is.na(file)){   ##checks to make sure the file exists before proceeding w pipeline
+      print(paste0("No file found for ",i," and ",f))
+    }else{
+      geneFile<-geneFilePrep(file)
+      Frame_Maker<-foreach(iD=OrgSub$GeneID, .packages = c('plyr','dplyr','reader')) %do% {
+        if(!length(grep(i,geneFile$Gene1org[1]))==0){    #checking to see if the species id's match the first or second species
+          base<-data.frame(OrthologSpecies=rep(f,length(which(geneFile$Gene1id==iD))), GeneID=geneFile$Gene2id[geneFile$Gene1id==iD])
+          if(nrow(base)!=0){base$Inferred<-iD; base$Elements<-OrgSub$Elements[OrgSub$GeneID==iD]}
+          return(base)
+        }else{
+          base<-data.frame(OrthologSpecies=rep(f,length(which(geneFile$Gene2id==iD))), GeneID=geneFile$Gene1id[geneFile$Gene2id==iD])
+          if(nrow(base)!=0){base$Inferred<-iD; base$Elements<-OrgSub$Elements[OrgSub$GeneID==iD]}
+          return(base)
+        }
+      }
     }
     return(Frame_Maker)
   }
@@ -68,8 +90,8 @@ OrthologLists<-foreach(i=unique(ionomicsKnownGenesbase$Species), .packages = c('
   assign(paste0(i,"List"), List_Holder)
 }
 ConciseOrthologList<-unlist(OrthologLists, recursive = FALSE)
-names(OrthologLists)<-unique(ionomicsKnownGenesbase$Species)
-inferredOrthologs<-possibleOrthologs[which(!possibleOrthologs %in% ionomicsKnownGenesbase$Species)]
+names(OrthologLists)<-unique(listBase$Species)
+inferredOrthologs<-possibleOrthologs[which(!possibleOrthologs %in% listBase$Species)]
 
 InferredOrthologsIDs<-foreach(i=possibleOrthologs, .packages = c('plyr','dplyr','reader')) %do% {
   backside<-foreach(q=ConciseOrthologList, .combine = rbind) %do% {
@@ -93,11 +115,20 @@ names(Inferredframes)<-possibleOrthologs
 ####finding orthologs for the inferred genes
 InferredLists<-foreach(i=possibleOrthologs, .packages = c('plyr','dplyr','reader')) %do% {
   OrgSub<-Inferredframes[[i]]
-  files<-list.files("./data/phytozome/current/", recursive = FALSE, full.names = TRUE, pattern = paste0(i,"_"))
-  List_Holder<-foreach(f=files, .packages = c('plyr','dplyr','reader'), .combine = surprisinglySimple) %do% {
-    geneFile<-geneFilePrep(f)
-    Frame_Maker<-foreach(iD=OrgSub$GeneID, .packages = c('plyr','dplyr','reader')) %do% {
-      base<-data.frame(OrthologSpecies=geneFile$Gene2org[geneFile$Gene1id==iD], GeneID=geneFile$Gene2id[geneFile$Gene1id==iD])
+  #files<-list.files("./data/phytozome/current/", recursive = FALSE, full.names = TRUE, pattern = paste0(i,"_"))
+  List_Holder<-foreach(f=possibleOrthologs[!possibleOrthologs==i], .packages = c('plyr','dplyr','reader'), .combine = surprisinglySimple) %do% {
+    file<-list.files("./data/phytozome/current/", pattern = paste0(f,"_",i,"|",i,"_",f), full.names = T, recursive = F)[1]
+    if(is.na(file)){   ##checks to make sure the file exists before proceeding w pipeline
+      print(paste0("No file found for ",i," and ",f))
+    }else{
+      geneFile<-geneFilePrep(file)
+      Frame_Maker<-foreach(iD=OrgSub$GeneID, .packages = c('plyr','dplyr','reader')) %do% {
+        if(!length(grep(i,geneFile$Gene1org[1]))==0){
+          base<-data.frame(OrthologSpecies=rep(f, length(which(geneFile$Gene1id==iD))), GeneID=geneFile$Gene2id[geneFile$Gene1id==iD])
+        }else{
+          base<-data.frame(OrthologSpecies=rep(f, length(which(geneFile$Gene2id==iD))), GeneID=geneFile$Gene1id[geneFile$Gene2id==iD])
+        }
+      }
     }
     return(Frame_Maker)
   }
@@ -140,31 +171,33 @@ parsedlistings<-foreach(i=possibleOrthologs, .packages = c('plyr','dplyr','reade
   listings<-listings[-c(1:length(Overall[[i]])),]
   return(OrgSubHolder)
 }
-parsedlistings2<-foreach(i=unique(ionomicsKnownGenesbase$Species), .packages = c('plyr','dplyr','reader')) %do% {
+parsedlistings2<-foreach(i=unique(listBase$Species), .packages = c('plyr','dplyr','reader')) %do% {
   OrgSubHolder<-listings2[c(1:length(PrimaryInferred[[i]])),]
   listings2<-listings2[-c(1:length(PrimaryInferred[[i]])),]
   return(OrgSubHolder)
 }
 names(parsedlistings)<-possibleOrthologs
-names(parsedlistings2)<-unique(ionomicsKnownGenesbase$Species)
+names(parsedlistings2)<-unique(listBase$Species)
 
 #####splitting the table into seperate files for each organism - inferred stuff will need to be added onto this
-OrthologTables<-foreach(i=unique(ionomicsKnownGenesbase$Species), .packages = c('plyr','dplyr','reader')) %do% {
-  TableHolder<-ionomicsKnownGenesbase[ionomicsKnownGenesbase$Species==i,]
+OrthologTables<-foreach(i=unique(listBase$Species), .packages = c('plyr','dplyr','reader')) %do% {
+  TableHolder<-listBase[listBase$Species==i,]
   TableHolder$`Primary/Inferred`<-"Primary"
   TableHolder$`Inferred from?`<-"NA"
   TableHolder<-cbind(TableHolder,parsedlistings[[i]])
   return(TableHolder)
 }
-names(OrthologTables)<-unique(ionomicsKnownGenesbase$Species)
-okInferrs<-c(parsedlistings2,parsedlistings[-c(1:length(unique(ionomicsKnownGenesbase$Species)))])
+names(OrthologTables)<-unique(listBase$Species)
+okInferrs<-c(parsedlistings2,parsedlistings[-c(1:length(unique(listBase$Species)))])
 InferredTables<-foreach(i=possibleOrthologs, .packages = c('plyr','dplyr','reader')) %do% {
   TableHolder<-Inferredframes[[i]]
   TableHolder<-cbind(TableHolder,distinct(okInferrs[[i]]))
 }
 names(InferredTables)<-possibleOrthologs
 #####making tables for the inferred orthologs#####
-Combining<-foreach(i=unique(ionomicsKnownGenesbase$Species), .packages = c('plyr','dplyr','reader')) %do% {
+summaryTable<-data.frame(Org=character(),GeneNum=integer(),NumPrimary=integer(),`NumPrimary/Inferred`=integer(),NumInferred=integer(),
+                         NoOrthologs=integer())
+Combining<-foreach(i=unique(listBase$Species), .packages = c('plyr','dplyr','reader')) %do% {
   Ortho<-OrthologTables[[i]]
   Infer<-InferredTables[[i]]
   colnames(Infer)<-colnames(Ortho)
@@ -177,10 +210,23 @@ Combining<-foreach(i=unique(ionomicsKnownGenesbase$Species), .packages = c('plyr
     }
   }
   setnames(Ortho, old = possibleOrthologs, new = gsub("(.+)","\\1 orthologs", possibleOrthologs))
-  write.table(Ortho, file = paste0("./IonomicsKnownGenes/",i,"_knownIonomicsGenesWOrthologs.csv"), row.names = FALSE,col.names = TRUE, sep = ",")
+  Ortho<-Ortho[ , -which(names(Ortho)==paste0(i," orthologs"))]
+  summaryTableEntry<-data.frame(Org=i,GeneNum=nrow(Ortho),NumPrimary=length(grep("^Primary$",Ortho$`Primary/Inferred`)),
+                           `NumPrimary/Inferred`=length(grep("Primary/Inferred",Ortho$`Primary/Inferred`)),
+                           NumInferred=length(grep("^Inferred$",Ortho$`Primary/Inferred`)),
+                           NoOrthologs=length(which(apply(Ortho[,grep("orthologs",colnames(Ortho))],1,function(x) if(sum(is.na(x)|x=="")==length(possibleOrthologs)){return(TRUE)} else{FALSE}))))
+  summaryTable<-rbind(summaryTable,summaryTableEntry)
+  write.table(Ortho, file = paste0("./IonomicsKnownGenes/knownIonomicsGenesWOrthologs/",i,"_knownIonomicsGenesWOrthologs.csv"), row.names = FALSE,col.names = TRUE, sep = ",")
   return(Ortho)
 }
 for(i in inferredOrthologs){
   setnames(InferredTables[[i]], old = possibleOrthologs, new = gsub("(.+)","\\1 orthologs", possibleOrthologs))
-  write.table(InferredTables[[i]], file = paste0("./IonomicsKnownGenes/",i,"_knownIonomicsGenesWOrthologs.csv"), row.names = FALSE,col.names = TRUE, sep = ",")
+  setnames(InferredTables[[i]], old=c("Primary.Inferred"), new=c("Primary/Inferred"))
+  summaryTableEntry<-data.frame(Org=i,GeneNum=nrow(InferredTables[[i]]),NumPrimary=length(grep("^Primary$",InferredTables[[i]]$`Primary/Inferred`)),
+                                `NumPrimary/Inferred`=length(grep("Primary/Inferred",InferredTables[[i]]$`Primary/Inferred`)),
+                                NumInferred=length(grep("^Inferred$",InferredTables[[i]]$`Primary/Inferred`)),
+                                NoOrthologs=length(which(apply(InferredTables[[i]][,grep("orthologs",colnames(InferredTables))],1,function(x) if(sum(is.na(x)|x=="")==length(possibleOrthologs)){return(TRUE)} else{FALSE}))))
+  summaryTable<-rbind(summaryTable,summaryTableEntry)
+  write.table(InferredTables[[i]], file = paste0("./IonomicsKnownGenes/knownIonomicsGenesWOrthologs/",i,"_knownIonomicsGenesWOrthologs.csv"), row.names = FALSE,col.names = TRUE, sep = ",")
 }
+write.table(summaryTable, file = "./IonomicsKnownGenes/CurrentIonomicsSummaryTable.csv", row.names = FALSE, col.names = TRUE, sep = ",")
