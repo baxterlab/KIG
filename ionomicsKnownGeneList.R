@@ -43,7 +43,7 @@ geneFilePrep<-function(filePath){
 ############################
 ####beginning of pipeline###
 
-dir.create("./knownIonomicsGenesWOrthologs")
+#dir.create("./knownIonomicsGenesWOrthologs")
 listBase <- read_csv("IonomicsKnownGenes/ionomics_known_genes_input.csv")
 listBase<-listBase[order(listBase$Species, listBase$GeneID),]
 ###checking for duplicate entries
@@ -222,6 +222,7 @@ Combining<-foreach(i=unique(listBase$Species), .packages = c('plyr','dplyr','rea
 for(i in inferredOrthologs){
   setnames(InferredTables[[i]], old = possibleOrthologs, new = gsub("(.+)","\\1 orthologs", possibleOrthologs))
   setnames(InferredTables[[i]], old=c("Primary.Inferred"), new=c("Primary/Inferred"))
+  InferredTables[[i]]<-InferredTables[[i]][ , -which(names(InferredTables[[i]])==paste0(i," orthologs"))]
   summaryTableEntry<-data.frame(Org=i,GeneNum=nrow(InferredTables[[i]]),NumPrimary=length(grep("^Primary$",InferredTables[[i]]$`Primary/Inferred`)),
                                 `NumPrimary/Inferred`=length(grep("Primary/Inferred",InferredTables[[i]]$`Primary/Inferred`)),
                                 NumInferred=length(grep("^Inferred$",InferredTables[[i]]$`Primary/Inferred`)),

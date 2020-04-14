@@ -40,7 +40,6 @@ A.thaliana,AT2G28160,FRU,Fe,10.1038/cr.2008.26,,Shoots,FIT1
 A.thaliana,AT2G28670,ESB1,"Ca,Mn,Zn,Na,S,K,As,Se,Mo",10.1371/journal.pgen.1000492,NA,Leaf,NA
 A.thaliana,AT2G32830,PHT1;5,P,10.1104/pp.111.174805,,Roots,
 A.thaliana,AT2G33770,PHO2,P,10.1105/tpc.112.096636,,"Roots,shoots",
-A.thaliana,AT2G34660,ABCC2,Cd,10.1111/j.1365-313X.2011.04789.x,,Shoots,NA
 A.thaliana,AT2G37430,ZAT11,Ni,10.1007/s00299-014-1675-7,,Shoots,
 A.thaliana,AT2G38460,FPN1,Co,10.1105/tpc.109.069401,NA,Leaf,
 A.thaliana,AT2G38940,PHT1;4,P,10.1111/j.1365-313X.2004.02161.x,,"Roots,shoots",PT2
@@ -49,8 +48,9 @@ A.thaliana,AT2G42000,AtMT4a,"Cu,Zn",10.1111/j.1365-3040.2011.02450.x,,Seeds,
 A.thaliana,AT2G46430,CNGC3,K,10.1093/jxb/erj064,NA,Leaf,NA
 A.thaliana,AT2G46800,AtMTP1,Zn,10.1016/j.febslet.2005.06.046,NA,Shoots,NA
 A.thaliana,AT2G47160,BOR1,B,10.1111/j.1365-313X.2006.02763.x,,Shoots,
+A.thaliana,AT3G01310,VIH2,P,10.7554/eLife.43582,,Shoots,
 A.thaliana,AT3G06060,TSC10a,"Na,K,Rb,Mg,Ca,Fe,Mo",10.1105/tpc.110.079095,NA,Leaf,NA
-A.thaliana,AT3G06100,NIP7,As,10.1002/1873-3468.12103 10.1016/j.febslet.2008.04.022,NA,NA,NA
+A.thaliana,AT3G06100,NIP7,As,10.1002/1873-3468.12103;10.1016/j.febslet.2008.04.022,NA,NA,NA
 A.thaliana,AT3G08040,FRD3/MAN1,Mn,10.1104/pp.111.3.849,NA,Leaf,NA
 A.thaliana,AT3G12750,AtZIP1,Mn,10.1093/jxb/ers315,,Roots,
 A.thaliana,AT3G12820,myb10,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
@@ -93,6 +93,7 @@ A.thaliana,AT5G03455,ACR2,"As,P",10.1073/pnas.0509770102,,"Roots,shoots",
 A.thaliana,AT5G03570,FPN2,"Co,Ni",10.1105/tpc.109.069401;10.1074/jbc.M601062200,NA,Leaf,IREG2
 A.thaliana,AT5G09690,MGT7,Mg,10.1093/jxb/err283,,Shoots,NA
 A.thaliana,AT5G13740,ZIF1,"Zn,Fe",10.1105/tpc.111.095042,,Shoots,
+A.thaliana,AT5G15070,VIH1,P,10.7554/eLife.43582,,Shoots,
 A.thaliana,AT5G15410,CNGC2/DND1,"Ca,Mg",10.1371/journal.pone.0063014,,seeds,NA
 A.thaliana,AT5G17290,APG5,"Fe, Mn, Zn",10.1093/jxb/ery388,,"Leaf, shoots, seeds",NA
 A.thaliana,AT5G18830,AtSPL7,Cu,10.1105/tpc.111.090431,NA,"Shoots, roots",NA
@@ -168,9 +169,9 @@ O.sativa,Os01g0689300,OsHRZ1,Fe,10.1038/ncomms3792,NA,"Shoots, seeds",
 T.aestivum,2AL-TRIAE_CS42_ 2AL_TGACv1_095050_AA0306410,TaIPK1,"Fe, Zn",10.3389/fpls.2018.00259,,Seed,
 T.aestivum,Traes_4AS_7220D33B3,Ta-PHR1,P,10.1093/aob/mct080,,Shoots,
 T.aestivum,Traes_4BL_7091749BF,TaABCC13,Ca,10.1093/jxb/erw224,,Seed,
-T.aestivum,Traes_4DL_3F8034BFD,HKT2;1,Na,"10.1046/j.1365-313X.2002.01410.x,10.1046/j.1365-313X.2002.01410.x",NA,Roots,
-Z.mays,GRMZM2063306,YS3,Fe,10.3389/fpls.2018.00157,,Leaf,
+T.aestivum,Traes_4DL_3F8034BFD,HKT2;1,Na,10.1046/j.1365-313X.2002.01410.x,NA,Roots,
 Z.mays,GRMZM2G047616,ZmHKT1,Na,10.1111/nph.14882,,Leaf,Also MRS2-7
 Z.mays,GRMZM2G060952,YS1,Fe,10.1104/pp.106.1.71,"O.sativa, S.bicolor, T.aestivum",Root,Also MRS2-4
+Z.mays,GRMZM2G063306,YS3,Fe,10.3389/fpls.2018.00157,,Leaf,
 Z.mays,GRMZM2G084779,ZmHAK5,K,10.1111/jipb.12756,,"Roots, shoots",
 Z.mays,GRMZM2G176209,TLS1,B,10.1105/tpc.114.125898,,"Shoots, roots, anthers",
