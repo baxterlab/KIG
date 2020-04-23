@@ -1,5 +1,3 @@
-README - LWhitt 10/1/2018
-
 Ionomics Known Gene List pipeline (v1.0): RScript that takes the primary genes from the Ionomics Known Genes list and finds orthologs from other species and appends them to the list as inferred genes. Each species will have its own csv output file that contains all of its primary genes and genes that have been inferred as orthologs to other species' primary genes, along with each gene's corresponding orthologs in every other species. Current primary species, dependent upon submissions to the KnownIonomeList, include Arabidopsis thaliana, Oryza sativa, Zea mays, and Medicago truncatula. Current inferred species include all the organisms listed in the primary list, as well as Sorghum bicolor, Glycine max, Setaria viridis, and Setaria italica.
 
 R version 3.5.0 (2018-04-23)
@@ -30,6 +28,6 @@ Microsoft Corporation & Weston, S. 2017. doParallel: Foreach Parallel Adaptor fo
 
 Wickham, H. 2011. The Split-Apply-Combine Strategy for Data Analysis. Journal of Statistical Software, 40(1), 1-29. URL http://www.jstatsoft.org/v40/i01/.
 
-Wickham, H., François, R., Henry, L. and Müller, K. (2018). dplyr: A Grammar of Data Manipulation. R package version 0.7.5. https://CRAN.R-project.org/package=dplyr
+Wickham, H., FranÃ§ois, R., Henry, L. and MÃ¼ller, K. (2018). dplyr: A Grammar of Data Manipulation. R package version 0.7.5. https://CRAN.R-project.org/package=dplyr
 
 Wickham, H., Hester, J. & Francois, R. 2017. readr: Read Rectangular Text Data. R package version 1.1.1. https://CRAN.R-project.org/package=readr
