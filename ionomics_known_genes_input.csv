@@ -14,7 +14,7 @@ A.thaliana,AT1G30450,CCC,"Ca,K,Na,S",10.1371/journal.pone.0063014,,seeds,NA
 A.thaliana,AT1G31885,NIP3;1,As,10.1016/j.molp.2015.01.005,,Shoots,NA
 A.thaliana,AT1G32450,NRT1.5/NPF7.3,K,10.1105/tpc.16.00972,NA,"Shoots, Roots",NA
 A.thaliana,AT1G36370,MSA1,"S, Se",10.1371/journal.pgen.1006298,NA,Shoots,NA
-A.thaliana,AT1G56160,myb72,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
+A.thaliana,AT1G56160,MYB72,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
 A.thaliana,AT1G56430,NAS4,"Fe,Cd,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
 A.thaliana,AT1G59870,PEN3,Cd,10.1111/j.1365-313X.2007.03044.x,,"Shoots, roots",PDR8
 A.thaliana,AT1G60960,IRT3,Fe,10.1111/j.1469-8137.2009.02766.x,,Roots,NA
@@ -53,7 +53,7 @@ A.thaliana,AT3G06060,TSC10a,"Na,K,Rb,Mg,Ca,Fe,Mo",10.1105/tpc.110.079095,NA,Leaf
 A.thaliana,AT3G06100,NIP7,As,10.1002/1873-3468.12103;10.1016/j.febslet.2008.04.022,NA,NA,NA
 A.thaliana,AT3G08040,FRD3/MAN1,Mn,10.1104/pp.111.3.849,NA,Leaf,NA
 A.thaliana,AT3G12750,ZIP1,Mn,10.1093/jxb/ers315,,Roots,NA
-A.thaliana,AT3G12820,myb10,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
+A.thaliana,AT3G12820,MYB10,"Fe,Cd,Zn,Co,Mo",10.1371/journal.pgen.1003953,NA,Leaf,NA
 A.thaliana,AT3G13320,CAX2,"Mn,Fe,K,P",10.1371/journal.pone.0047455,,Seed,"*Cited in the paper, but thalemine only has publication available for CAX1"
 A.thaliana,AT3G14280,,S,10.1371/journal.pone.0063014,,seeds,NA
 A.thaliana,AT3G15380,CTL1,"Na, Fe, Zn, Mn, Mo",10.1371/journal.pbio.2002978,NA,"Shoots, Roots",NA
@@ -111,7 +111,7 @@ A.thaliana,AT5G59030,COPT1,Cu,10.1074/jbc.M313321200,,"Seed,Leaf",NA
 A.thaliana,AT5G64930,CPR5,K,10.1371/journal.pone.0026360,NA,Leaf,NA
 A.thaliana,AT5G67330,NRAMP3,"Fe,Mn,Zn",10.1104/pp.109.150946,NA,Shoots,NA
 M.truncatula,Medtr1g010270,MOT1.2,Mo,10.1111/pce.13388,NA,Nodules,NA
-M.truncatula,Medtr3g088460,Nramp1,Fe,10.1104/pp.114.254672,NA,Nodules,NA
+M.truncatula,Medtr3g088460,NRAMP1,Fe,10.1104/pp.114.254672,NA,Nodules,NA
 M.truncatula,Medtr3g464210,MOT1.3,Mo,10.1111/nph.14739,NA,Nodules,NA
 M.truncatula,Medtr4g019870,COPT1,Cu,10.1111/nph.14992,NA,Nodules,NA
 M.truncatula,Medtr4g064893,MTP2,Zn,10.3389/fpls.2018.00990,NA,Nodules,NA
