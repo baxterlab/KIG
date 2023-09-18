@@ -1,8 +1,12 @@
 # Known Ionomic Gene List pipeline (v1.0) 
 
+##### Version 2: the updated list with OrthoFinder orthologs can be found [here](https://github.com/danforthcenter/KIG_v2/)
+
 RScript that takes the primary genes from the Known Ionomic Genes list and finds orthologs from other species and appends them to the list as inferred genes. Each species will have its own csv output file that contains all of its primary genes and genes that have been inferred as orthologs to other species' primary genes, along with each gene's corresponding orthologs in every other species. Current primary species, dependent upon submissions to the KnownIonomeList, include Arabidopsis thaliana, Oryza sativa, Zea mays, and Medicago truncatula. Current inferred species include all the organisms listed in the primary list, as well as Sorghum bicolor, Glycine max, Setaria viridis, and Setaria italica.
 
 R version 3.5.0 (2018-04-23)
+
+[Whitt et al. 2020](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7576880/)
 
 #### R Packages: The KIG List script runs with these additional packages:
     1.1   plyr and dplyr (Wickham 2011 & Wickham et al. 2018)
